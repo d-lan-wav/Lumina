@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-export default function useReveal(trigger) {
+export default function useReveal(trigger, selector = '.movie-card') {
   useEffect(() => {
-    const cards = document.querySelectorAll('.movie-card');
+    const items = document.querySelectorAll(selector);
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -12,7 +12,7 @@ export default function useReveal(trigger) {
         }
       });
     }, { threshold: 0.1 });
-    cards.forEach(card => observer.observe(card));
+    items.forEach(item => observer.observe(item));
     return () => observer.disconnect();
-  }, [trigger]);
+  }, [trigger, selector]);
 }

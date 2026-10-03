@@ -42,7 +42,7 @@ function Nav() {
   const handleSearch = (e) => {
     e.preventDefault();
     const q = query.trim();
-    navigate(q ? `/?q=${encodeURIComponent(q)}` : '/');
+    navigate(q ? `/buscar?q=${encodeURIComponent(q)}` : '/');
     closeMenu();
   };
 

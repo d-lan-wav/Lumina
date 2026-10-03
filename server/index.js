@@ -52,7 +52,12 @@ app.get('/api/movies/:id', async (req, res) => {
   const lang = req.query.lang === 'en' ? 'en-US' : 'es-ES';
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/movie/${req.params.id}`, {
-      params: { api_key: TMDB_API_KEY, language: lang }
+      params: {
+        api_key: TMDB_API_KEY,
+        language: lang,
+        append_to_response: 'credits,videos',
+        include_video_language: lang === 'en-US' ? 'en' : 'es,en'
+      }
     });
     res.json(response.data);
   } catch (error) {
@@ -78,14 +83,13 @@ app.get('/api/genres/:id/movies', async (req, res) => {
   const lang = req.query.lang === 'en' ? 'en-US' : 'es-ES';
   try {
     const response = await axios.get(`${TMDB_BASE_URL}/discover/movie`, {
-       params: {
+      params: {
         api_key: TMDB_API_KEY,
         language: lang,
         with_genres: req.params.id,
         sort_by: 'popularity.desc',
         page: req.query.page || 1
       }
-
     });
     res.json(response.data);
   } catch (error) {

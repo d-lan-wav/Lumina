@@ -101,7 +101,7 @@ function Home() {
 
       <h1 style={{ fontSize: 'clamp(34px, 10vw, 120px)', fontWeight: 500, letterSpacing: '-0.02em', padding: '24px 48px', margin: 0, lineHeight: 1 }}>LUMINA.</h1>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', padding: '0 48px 48px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', padding: '24px 48px', backgroundColor: 'var(--surface)' }}>
         {displayedMovies.map(movie => (
           <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-card" style={{ textDecoration: 'none', color: 'inherit' }}>
             <img src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} alt={movie.title} style={{ width: '100%' }} />
