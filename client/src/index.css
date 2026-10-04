@@ -914,3 +914,38 @@ a.poster {
 .site-footer a:hover {
   color: var(--accent);
 }
+
+/* Animación de entrada */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #18181B;
+}
+
+.intro-left {
+  left: 0;
+}
+
+.intro-right {
+  right: 0;
+}
+
+.intro-light {
+  position: relative;
+  width: 2px;
+  height: 62vh;
+  background: linear-gradient(to bottom, transparent 0%, #E4E4E1 22%, #E4E4E1 78%, transparent 100%);
+  filter: drop-shadow(0 0 14px rgba(228, 228, 225, 0.55));
+  opacity: 0;
+}
