@@ -12,7 +12,7 @@ function Search() {
     let cancelled = false;
     setResults(null);
     if (!query) return;
-    axios.get(`http://localhost:3000/api/movies/search/${encodeURIComponent(query)}`)
+    axios.get(`/api/movies/search/${encodeURIComponent(query)}`)
       .then(response => {
         if (!cancelled) setResults(response.data.results.filter(movie => movie.poster_path));
       })

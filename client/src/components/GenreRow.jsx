@@ -9,7 +9,7 @@ function GenreRow({ genre }) {
   const dragHandlers = useDragScroll(trackRef);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/genres/${genre.id}/movies`)
+    axios.get(`/api/genres/${genre.id}/movies`)
       .then(response => setMovies(response.data.results.filter(movie => movie.poster_path)))
       .catch(error => console.error(error));
   }, [genre.id]);

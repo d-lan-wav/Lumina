@@ -10,7 +10,7 @@ function GenreGrid({ id }) {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/genres')
+    axios.get('/api/genres')
       .then(response => {
         const genre = response.data.find(g => String(g.id) === id);
         setGenreName(genre ? genre.name : '');
@@ -19,7 +19,7 @@ function GenreGrid({ id }) {
   }, [id]);
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/genres/${id}/movies?page=${page}`)
+    axios.get(`/api/genres/${id}/movies?page=${page}`)
       .then(response => {
         const withPoster = response.data.results.filter(movie => movie.poster_path);
         setPages(previous => ({ ...previous, [page]: withPoster }));

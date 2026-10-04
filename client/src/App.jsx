@@ -7,6 +7,7 @@ import Categories from './pages/Categories';
 import GenreDetail from './pages/GenreDetail';
 import Search from './pages/Search';
 import CookieBanner from './components/CookieBanner';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/categoria/:id" element={<GenreDetail />} />
         <Route path="/buscar" element={<Search />} />
       </Routes>
+      <Footer />
       <CookieBanner />
     </>
   );

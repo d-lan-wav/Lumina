@@ -16,7 +16,7 @@ function Nav() {
   }, [theme]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/genres')
+    axios.get('/api/genres')
       .then(response => setGenres(response.data))
       .catch(error => console.error(error));
   }, []);
