@@ -19,9 +19,5 @@
 
 ## mejoras futuras
 - [ ] favoritos (localstorage, con cuenta en un futuro)
-- [ ] categorias
-- [ ] animacion de entrada 
-- [ ] previsualizar con imagen    
+   
 
-## plazo
-- fecha límite: 2 de octubre

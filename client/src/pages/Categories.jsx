@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import GenreRow from '../components/GenreRow';
 
-function Categories() {
+function Categories({ type = 'movie' }) {
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/genres')
+    setGenres([]);
+    axios.get(type === 'tv' ? '/api/genres/tv' : '/api/genres')
       .then(response => setGenres(response.data))
       .catch(error => console.error(error));
-  }, []);
+  }, [type]);
 
   return (
     <div>
@@ -17,7 +18,7 @@ function Categories() {
         Categorías.
       </h1>
       {genres.map(genre => (
-        <GenreRow key={genre.id} genre={genre} />
+        <GenreRow key={`${type}-${genre.id}`} genre={genre} type={type} />
       ))}
     </div>
   );

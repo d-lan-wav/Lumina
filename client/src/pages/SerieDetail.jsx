@@ -3,18 +3,27 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import HeartButton from '../components/HeartButton';
 
-function MovieDetail() {
+const STATUS = {
+  'Returning Series': 'En emisión',
+  'In Production': 'En producción',
+  Ended: 'Finalizada',
+  Canceled: 'Cancelada',
+  Planned: 'Planeada',
+  Pilot: 'Piloto'
+};
+
+function SerieDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [movie, setMovie] = useState(null);
+  const [show, setShow] = useState(null);
   const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
-    setMovie(null);
+    setShow(null);
     setPlaying(false);
-    axios.get(`/api/movies/${id}`)
-      .then(response => setMovie(response.data))
+    axios.get(`/api/tv/${id}`)
+      .then(response => setShow(response.data))
       .catch(error => console.error(error));
   }, [id]);
 
@@ -27,37 +36,40 @@ function MovieDetail() {
     return () => document.removeEventListener('keydown', handleKey);
   }, [playing]);
 
-  if (!movie) return <p className="detail-loading">Cargando…</p>;
+  if (!show) return <p className="detail-loading">Cargando…</p>;
 
-  const goBack = () => (location.key === 'default' ? navigate('/') : navigate(-1));
+  const goBack = () => (location.key === 'default' ? navigate('/series') : navigate(-1));
 
-  const crew = movie.credits?.crew ?? [];
-  const director = crew.find(person => person.job === 'Director');
-  const composer = crew.find(person => person.job === 'Original Music Composer');
-  const cast = (movie.credits?.cast ?? []).slice(0, 4);
+  const cast = (show.credits?.cast ?? []).slice(0, 4);
 
-  const videos = movie.videos?.results ?? [];
-  const youtubeTrailers = videos.filter(video => video.site === 'YouTube' && video.type === 'Trailer');
-  const trailer = youtubeTrailers.find(video => video.official) || youtubeTrailers[0];
+  const videos = show.videos?.results ?? [];
+  const youtubeVideos = videos.filter(
+    video => video.site === 'YouTube' && (video.type === 'Trailer' || video.type === 'Teaser')
+  );
+  const trailer =
+    youtubeVideos.find(video => video.type === 'Trailer' && video.official) ||
+    youtubeVideos.find(video => video.type === 'Trailer') ||
+    youtubeVideos[0];
 
-  const releaseDate = movie.release_date
-    ? new Date(`${movie.release_date}T00:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+  const firstAir = show.first_air_date
+    ? new Date(`${show.first_air_date}T00:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
     : null;
 
   const facts = [
-    { label: 'Estreno', value: releaseDate },
-    { label: 'Director', value: director?.name },
-    { label: 'Música', value: composer?.name },
-    { label: 'Género', value: movie.genres?.map(genre => genre.name).join(', ') },
-    { label: 'Duración', value: movie.runtime ? `${movie.runtime} min` : null },
-    { label: 'Valoración', value: movie.vote_average ? `⭐ ${movie.vote_average.toFixed(1)}` : null }
+    { label: 'Estreno', value: firstAir },
+    { label: 'Creador', value: show.created_by?.map(person => person.name).join(', ') },
+    { label: 'Género', value: show.genres?.map(genre => genre.name).join(', ') },
+    { label: 'Temporadas', value: show.number_of_seasons ? String(show.number_of_seasons) : null },
+    { label: 'Episodios', value: show.number_of_episodes ? String(show.number_of_episodes) : null },
+    { label: 'Estado', value: STATUS[show.status] ?? show.status },
+    { label: 'Valoración', value: show.vote_average ? `⭐ ${show.vote_average.toFixed(1)}` : null }
   ].filter(fact => fact.value);
 
   return (
     <div className="detail">
       <div
         className="detail-bg"
-        style={movie.backdrop_path ? { backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})` } : undefined}
+        style={show.backdrop_path ? { backgroundImage: `url(https://image.tmdb.org/t/p/w1280${show.backdrop_path})` } : undefined}
       />
       <div className="detail-shade" />
       <div className="detail-veil" />
@@ -65,12 +77,12 @@ function MovieDetail() {
       <div className="detail-main">
         <div className="detail-top">
           <button className="detail-back" onClick={goBack}>← Volver</button>
-          <HeartButton movie={movie} />
+          <HeartButton movie={show} type="tv" />
         </div>
         <span className="detail-bar" />
-        <h1 className="detail-title">{movie.title}</h1>
-        {movie.tagline && <p className="detail-tagline">{movie.tagline}</p>}
-        <p className="detail-synopsis">{movie.overview}</p>
+        <h1 className="detail-title">{show.name}</h1>
+        {show.tagline && <p className="detail-tagline">{show.tagline}</p>}
+        <p className="detail-synopsis">{show.overview}</p>
       </div>
 
       <aside className="detail-facts">
@@ -107,7 +119,7 @@ function MovieDetail() {
           <div className="trailer-frame" onClick={(e) => e.stopPropagation()}>
             <iframe
               src={`https://www.youtube-nocookie.com/embed/${trailer.key}?autoplay=1&rel=0`}
-              title={`Tráiler de ${movie.title}`}
+              title={`Tráiler de ${show.name}`}
               allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
             />
@@ -119,4 +131,4 @@ function MovieDetail() {
   );
 }
 
-export default MovieDetail;
+export default SerieDetail;
