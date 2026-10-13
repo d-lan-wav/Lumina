@@ -7,6 +7,3 @@ es una pagina web diseñada para explorar el mundo del cine sin distracciones, d
 - node.js
 - gsap (animaciones)
 - tmbd api (datos de peliculas)
-
-##estado
-planificacion 
